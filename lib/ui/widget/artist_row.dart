@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:git_app/ui/widget/artist_row_item.dart';
+import 'package:saavan_app/ui/widget/artist_row_item.dart';
 
 class ArtistRow extends StatelessWidget {
   const ArtistRow({Key? key, this.title}) : super(key: key);

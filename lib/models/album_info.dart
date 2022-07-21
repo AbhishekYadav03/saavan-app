@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:git_app/models/song.dart';
+import 'package:saavan_app/models/song.dart';
 
 AlbumInfo albumInfoFromJson(String str) => AlbumInfo.fromJson(json.decode(str));
 

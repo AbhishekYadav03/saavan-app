@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:git_app/models/genre.dart';
+import 'package:saavan_app/models/genre.dart';
 
 class RadioRowItem extends StatelessWidget {
   const RadioRowItem({Key? key, this.genre}) : super(key: key);

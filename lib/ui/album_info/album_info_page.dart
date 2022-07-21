@@ -1,4 +1,4 @@
-import 'package:git_app/ui/imports.dart';
+import 'package:saavan_app/ui/imports.dart';
 
 class AlbumInfoPage extends StatelessWidget {
   static const String route = "AlbumInfoPage";

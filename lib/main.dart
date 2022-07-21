@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:git_app/ui/album_info/album_info_page.dart';
-import 'package:git_app/ui/album_info/album_info_view_model.dart';
-import 'package:git_app/ui/home/home.dart';
-import 'package:git_app/ui/home/home_view_model.dart';
-import 'package:git_app/ui/search/search_page_view_model.dart';
-import 'package:provider/provider.dart';
+import 'package:saavan_app/ui/imports.dart';
 
 void main() {
   runApp(const MyApp());

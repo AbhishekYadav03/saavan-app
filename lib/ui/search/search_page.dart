@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:git_app/models/search_response.dart';
-import 'package:git_app/ui/search/search_page_view_model.dart';
+import 'package:saavan_app/models/search_response.dart';
+import 'package:saavan_app/ui/search/search_page_view_model.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatelessWidget {

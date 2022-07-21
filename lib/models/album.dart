@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:git_app/models/album_more_info.dart';
+import 'package:saavan_app/ui/imports.dart';
 
 List<Album> albumsFromJson(String str) => List<Album>.from(json.decode(str).map((x) => Album.fromJson(x)));
 

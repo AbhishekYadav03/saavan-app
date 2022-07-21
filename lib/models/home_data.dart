@@ -4,12 +4,12 @@
 
 import 'dart:convert';
 
-import 'package:git_app/models/album.dart';
-import 'package:git_app/models/chart.dart';
-import 'package:git_app/models/genre.dart';
-import 'package:git_app/models/globle_config.dart';
-import 'package:git_app/models/play_list.dart';
-import 'package:git_app/models/user_state.dart';
+import 'package:saavan_app/models/album.dart';
+import 'package:saavan_app/models/chart.dart';
+import 'package:saavan_app/models/genre.dart';
+import 'package:saavan_app/models/globle_config.dart';
+import 'package:saavan_app/models/play_list.dart';
+import 'package:saavan_app/models/user_state.dart';
 
 HomeData homeDataFromJson(String str) => HomeData.fromJson(json.decode(str));
 

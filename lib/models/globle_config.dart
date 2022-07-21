@@ -1,4 +1,4 @@
-import 'package:git_app/models/stream_config.dart';
+import 'package:saavan_app/models/stream_config.dart';
 
 class GlobalConfig {
   GlobalConfig({

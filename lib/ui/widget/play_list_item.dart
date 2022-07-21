@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:git_app/ui/imports.dart';
+import 'package:saavan_app/ui/imports.dart';
 
 class PLayListItem extends StatelessWidget {
   const PLayListItem({Key? key, required this.chart}) : super(key: key);

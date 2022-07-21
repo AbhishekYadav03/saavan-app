@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:git_app/ui/imports.dart';
-import 'package:git_app/ui/widget/album_item.dart';
+import 'package:saavan_app/ui/imports.dart';
+import 'package:saavan_app/ui/widget/album_item.dart';
 
 class AlbumGrid extends StatelessWidget {
   const AlbumGrid({Key? key, this.title, required this.albums})

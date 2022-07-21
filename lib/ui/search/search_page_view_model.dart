@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:git_app/data/api_service.dart';
-import 'package:git_app/data/urls.dart';
-import 'package:git_app/models/response/api_error.dart';
-import 'package:git_app/models/response/api_success.dart';
-import 'package:git_app/models/search_response.dart';
+import 'package:saavan_app/data/api_service.dart';
+import 'package:saavan_app/data/urls.dart';
+import 'package:saavan_app/models/response/api_error.dart';
+import 'package:saavan_app/models/response/api_success.dart';
+import 'package:saavan_app/models/search_response.dart';
 
 class SearchListViewModel with ChangeNotifier {
   SearchResponse? _searchData;

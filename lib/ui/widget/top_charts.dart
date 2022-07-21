@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:git_app/models/chart.dart';
-import 'package:git_app/ui/home/home_view_model.dart';
-import 'package:git_app/ui/widget/play_list_item.dart';
+import 'package:saavan_app/models/chart.dart';
+import 'package:saavan_app/ui/home/home_view_model.dart';
+import 'package:saavan_app/ui/widget/play_list_item.dart';
 import 'package:provider/provider.dart';
 
 class TopCharts extends StatelessWidget {

@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:git_app/data/errors.dart';
-import 'package:git_app/models/response/api_error.dart';
-import 'package:git_app/models/response/api_success.dart';
+import 'package:saavan_app/ui/imports.dart';
 
 class ApiService {
   static Future<Object> getData({required String path}) async {

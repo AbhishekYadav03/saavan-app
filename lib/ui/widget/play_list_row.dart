@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:git_app/ui/imports.dart';
-import 'package:git_app/ui/widget/play_list_row_item.dart';
+import 'package:saavan_app/ui/imports.dart';
+import 'package:saavan_app/ui/widget/play_list_row_item.dart';
 
 class PlayListRow extends StatelessWidget {
   const PlayListRow({Key? key, this.title, this.playList}) : super(key: key);

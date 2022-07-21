@@ -1,4 +1,4 @@
-import 'package:git_app/models/bitrate.dart';
+import 'package:saavan_app/models/bitrate.dart';
 
 class StreamConfig {
   StreamConfig({

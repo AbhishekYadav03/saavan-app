@@ -1,4 +1,4 @@
-import 'package:git_app/models/play_list_more_info.dart';
+import 'package:saavan_app/models/play_list_more_info.dart';
 
 class PlaylistInfo {
   PlaylistInfo({

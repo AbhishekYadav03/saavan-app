@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:git_app/ui/album_info/album_info_page.dart';
-import 'package:git_app/ui/album_info/album_info_view_model.dart';
-import 'package:git_app/ui/imports.dart';
+import 'package:saavan_app/ui/album_info/album_info_page.dart';
+import 'package:saavan_app/ui/album_info/album_info_view_model.dart';
+import 'package:saavan_app/ui/imports.dart';
 import 'package:provider/provider.dart';
 
 class AlbumItem extends StatelessWidget {

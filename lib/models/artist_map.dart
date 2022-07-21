@@ -1,4 +1,4 @@
-import 'package:git_app/models/artist.dart';
+import 'package:saavan_app/models/artist.dart';
 
 class ArtistMap {
   ArtistMap({

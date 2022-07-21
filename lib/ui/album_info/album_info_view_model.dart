@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:git_app/data/api_service.dart';
-import 'package:git_app/data/urls.dart';
-import 'package:git_app/models/album_info.dart';
-import 'package:git_app/models/response/api_error.dart';
-import 'package:git_app/models/response/api_success.dart';
-import 'package:git_app/ui/imports.dart';
+import 'package:saavan_app/data/api_service.dart';
+import 'package:saavan_app/data/urls.dart';
+import 'package:saavan_app/models/album_info.dart';
+import 'package:saavan_app/models/response/api_error.dart';
+import 'package:saavan_app/models/response/api_success.dart';
+import 'package:saavan_app/ui/imports.dart';
 
 class AlbumInfoViewModel with ChangeNotifier {
   Album? _album;
