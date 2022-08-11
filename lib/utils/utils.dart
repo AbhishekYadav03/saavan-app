@@ -4,9 +4,13 @@ extension CutomExtentions on String {
     return "${(duration / 60).floor()}m ${duration % 60}s";
   }
 
+  String get parseDurationLong {
+    int duration = int.parse(this);
+    return "${(duration / 60).floor()} Minute ${duration % 60} Seconds";
+  }
+
   String get parseString {
-    String str = this;
-    return (str.replaceAll("&quot;", "\""));
+    return replaceAll("&#039;", '\'').replaceAll("&quot;", "\"");
   }
 
   int get parseInt {

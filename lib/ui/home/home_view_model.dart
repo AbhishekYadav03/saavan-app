@@ -54,9 +54,7 @@ class HomeViewModel with ChangeNotifier {
   }
 
   Future<void> getHomeData() async {
-    var response = await ApiService.getData(
-      path: Urls.homeData,
-    );
+    var response = await ApiService.getData(path: Urls.homeData);
     if (response is Success) {
       var data = homeDataFromJson((response.data).toString());
       albums = data.albums;
@@ -69,9 +67,7 @@ class HomeViewModel with ChangeNotifier {
   }
 
   Future<void> getTrendingData() async {
-    var response = await ApiService.getData(
-      path: Urls.trending,
-    );
+    var response = await ApiService.getData(path: Urls.trending);
     if (response is Success) {
       var data = albumsFromJson((response.data).toString());
       print("Trending length: ${data.length}");

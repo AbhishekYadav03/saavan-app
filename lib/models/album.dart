@@ -1,10 +1,17 @@
+// To parse this JSON data, do
+//
+//     final album = albumFromJson(jsonString);
+
 import 'dart:convert';
 
-import 'package:saavan_app/ui/imports.dart';
+import 'package:saavan_app/models/album_more_info.dart';
+import 'package:saavan_app/models/song.dart';
 
 List<Album> albumsFromJson(String str) => List<Album>.from(json.decode(str).map((x) => Album.fromJson(x)));
-
 String albumsToJson(List<Album> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+Album albumFromJson(String str) => Album.fromJson(json.decode(str));
+String albumToJson(Album data) => json.encode(data.toJson());
 
 class Album {
   Album({
@@ -21,7 +28,7 @@ class Album {
     this.explicitContent,
     this.listCount,
     this.listType,
-    this.list,
+    this.song,
     this.moreInfo,
   });
 
@@ -38,7 +45,7 @@ class Album {
   String? explicitContent;
   String? listCount;
   String? listType;
-  String? list;
+  List<Song>? song;
   AlbumMoreInfo? moreInfo;
 
   factory Album.fromJson(Map<String, dynamic> json) => Album(
@@ -55,7 +62,7 @@ class Album {
         explicitContent: json["explicit_content"],
         listCount: json["list_count"],
         listType: json["list_type"],
-        list: json["list"],
+        song: json["list"].toString() != "" ? List<Song>.from(json["list"].map((x) => Song.fromJson(x))) : [],
         moreInfo: json["more_info"] != null ? AlbumMoreInfo.fromJson(json["more_info"]) : null,
       );
 
@@ -73,7 +80,7 @@ class Album {
         "explicit_content": explicitContent,
         "list_count": listCount,
         "list_type": listType,
-        "list": list,
+        "Song": song != null ? List<dynamic>.from(song!.map((x) => x.toJson())) : [],
         "more_info": moreInfo?.toJson(),
       };
 }

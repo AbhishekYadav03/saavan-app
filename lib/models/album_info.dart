@@ -2,9 +2,7 @@
 //
 //     final albumInfo = albumInfoFromJson(jsonString);
 
-import 'dart:convert';
-
-import 'package:saavan_app/models/song.dart';
+/*
 
 AlbumInfo albumInfoFromJson(String str) => AlbumInfo.fromJson(json.decode(str));
 
@@ -64,3 +62,4 @@ class AlbumInfo {
         "songs": List<dynamic>.from(songs.map((x) => x.toJson())),
       };
 }
+*/

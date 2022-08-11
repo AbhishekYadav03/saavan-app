@@ -1,9 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:saavan_app/ui/album_info/album_info_page.dart';
-import 'package:saavan_app/ui/album_info/album_info_view_model.dart';
 import 'package:saavan_app/ui/imports.dart';
-import 'package:provider/provider.dart';
 
 class AlbumItem extends StatelessWidget {
   const AlbumItem({Key? key, this.album}) : super(key: key);
@@ -16,7 +11,7 @@ class AlbumItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         AlbumInfoViewModel viewModel = context.read<AlbumInfoViewModel>();
-        viewModel.album = album;
+        viewModel.getAlbumById(album?.id ?? "");
         Navigator.pushNamed(context, AlbumInfoPage.route);
       },
       child: Container(

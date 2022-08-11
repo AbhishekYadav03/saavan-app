@@ -1,210 +1,230 @@
-// To parse this JSON data, do
-//
-//     final song = songFromJson(jsonString);
-
-import 'dart:convert';
-
-Song songFromJson(String str) => Song.fromJson(json.decode(str));
-
-String songToJson(Song data) => json.encode(data.toJson());
+import 'artist_map.dart';
 
 class Song {
-  Song({
-    this.id,
-    this.type,
-    this.song,
-    this.album,
-    this.year,
-    this.music,
-    this.musicId,
-    this.primaryArtists,
-    this.primaryArtistsId,
-    this.featuredArtists,
-    this.featuredArtistsId,
-    this.singers,
-    this.starring,
-    this.image,
-    this.label,
-    this.albumid,
-    this.language,
-    this.origin,
-    this.playCount,
-    this.copyrightText,
-    this.the320Kbps,
-    this.isDolbyContent = false,
-    this.explicitContent = 0,
-    this.hasLyrics,
-    this.lyricsSnippet,
-    this.encryptedMediaUrl,
-    this.encryptedMediaPath,
-    this.mediaPreviewUrl,
-    this.permaUrl,
-    this.albumUrl,
-    this.duration,
-    this.rights,
-    this.webp = true,
-    this.starred,
-    this.artistMap,
-    this.releaseDate,
-    this.vcode,
-    this.vlink,
-    this.trillerAvailable = false,
-    this.labelUrl,
-  });
-
   String? id;
+  String? title;
+  String? subtitle;
+  String? headerDesc;
   String? type;
-  String? song;
-  String? album;
-  String? year;
-  String? music;
-  String? musicId;
-  String? primaryArtists;
-  String? primaryArtistsId;
-  String? featuredArtists;
-  String? featuredArtistsId;
-  String? singers;
-  String? starring;
-  String? image;
-  String? label;
-  String? albumid;
-  String? language;
-  String? origin;
-  String? playCount;
-  String? copyrightText;
-  String? the320Kbps;
-  bool isDolbyContent;
-  int explicitContent;
-  String? hasLyrics;
-  String? lyricsSnippet;
-  String? encryptedMediaUrl;
-  String? encryptedMediaPath;
-  String? mediaPreviewUrl;
   String? permaUrl;
+  String? image;
+  String? language;
+  String? year;
+  String? playCount;
+  String? explicitContent;
+  String? listCount;
+  String? listType;
+  String? list;
+  MoreInfo? moreInfo;
+
+  Song(
+      {this.id,
+      this.title,
+      this.subtitle,
+      this.headerDesc,
+      this.type,
+      this.permaUrl,
+      this.image,
+      this.language,
+      this.year,
+      this.playCount,
+      this.explicitContent,
+      this.listCount,
+      this.listType,
+      this.list,
+      this.moreInfo});
+
+  String? get artistsName {
+    String? names = "";
+    moreInfo?.artistMap?.primaryArtists?.asMap().forEach((index, artist) {
+      if (index == (moreInfo?.artistMap?.primaryArtists?.length ?? 0) - 1) {
+        names = "$names ${artist.name}";
+      } else {
+        names = "$names ${artist.name},";
+      }
+    });
+    return names;
+  }
+
+  Song.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    subtitle = json['subtitle'];
+    headerDesc = json['header_desc'];
+    type = json['type'];
+    permaUrl = json['perma_url'];
+    image = json['image'];
+    language = json['language'];
+    year = json['year'];
+    playCount = json['play_count'];
+    explicitContent = json['explicit_content'];
+    listCount = json['list_count'];
+    listType = json['list_type'];
+    list = json['list'];
+    moreInfo = json['more_info'] != null ? MoreInfo.fromJson(json['more_info']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['title'] = title;
+    data['subtitle'] = subtitle;
+    data['header_desc'] = headerDesc;
+    data['type'] = type;
+    data['perma_url'] = permaUrl;
+    data['image'] = image;
+    data['language'] = language;
+    data['year'] = year;
+    data['play_count'] = playCount;
+    data['explicit_content'] = explicitContent;
+    data['list_count'] = listCount;
+    data['list_type'] = listType;
+    data['list'] = list;
+    if (moreInfo != null) {
+      data['more_info'] = moreInfo!.toJson();
+    }
+    return data;
+  }
+}
+
+class MoreInfo {
+  String? music;
+  String? albumId;
+  String? album;
+  String? label;
+  String? origin;
+  bool? isDolbyContent;
+  String? s320kbps;
+  String? encryptedMediaUrl;
+  String? encryptedCacheUrl;
   String? albumUrl;
   String? duration;
   Rights? rights;
-  bool webp;
+  String? cacheState;
+  String? hasLyrics;
+  String? lyricsSnippet;
   String? starred;
-  Map<String, dynamic>? artistMap;
-  DateTime? releaseDate;
+  String? copyrightText;
+  ArtistMap? artistMap;
+  String? releaseDate;
   String? vcode;
   String? vlink;
-  bool trillerAvailable;
-  String? labelUrl;
+  bool? trillerAvailable;
+  String? webp;
+  String? lyricsId;
 
-  factory Song.fromJson(Map<String, dynamic> json) => Song(
-        id: json["id"],
-        type: json["type"],
-        song: json["song"],
-        album: json["album"],
-        year: json["year"],
-        music: json["music"],
-        musicId: json["music_id"],
-        primaryArtists: json["primary_artists"],
-        primaryArtistsId: json["primary_artists_id"],
-        featuredArtists: json["featured_artists"],
-        featuredArtistsId: json["featured_artists_id"],
-        singers: json["singers"],
-        starring: json["starring"],
-        image: json["image"],
-        label: json["label"],
-        albumid: json["albumid"],
-        language: json["language"],
-        origin: json["origin"],
-        playCount: json["play_count"],
-        copyrightText: json["copyright_text"],
-        the320Kbps: json["320kbps"],
-        isDolbyContent: json["is_dolby_content"],
-        explicitContent: json["explicit_content"],
-        hasLyrics: json["has_lyrics"],
-        lyricsSnippet: json["lyrics_snippet"],
-        encryptedMediaUrl: json["encrypted_media_url"],
-        encryptedMediaPath: json["encrypted_media_path"],
-        mediaPreviewUrl: json["media_preview_url"],
-        permaUrl: json["perma_url"],
-        albumUrl: json["album_url"],
-        duration: json["duration"],
-        rights: Rights.fromJson(json["rights"]),
-        webp: json["webp"],
-        starred: json["starred"],
-        artistMap: json["artistMap"],
-        releaseDate: DateTime.parse(json["release_date"]),
-        vcode: json["vcode"],
-        vlink: json["vlink"],
-        trillerAvailable: json["triller_available"],
-        labelUrl: json["label_url"],
-      );
+  MoreInfo(
+      {this.music,
+      this.albumId,
+      this.album,
+      this.label,
+      this.origin,
+      this.isDolbyContent,
+      this.s320kbps,
+      this.encryptedMediaUrl,
+      this.encryptedCacheUrl,
+      this.albumUrl,
+      this.duration,
+      this.rights,
+      this.cacheState,
+      this.hasLyrics,
+      this.lyricsSnippet,
+      this.starred,
+      this.copyrightText,
+      this.artistMap,
+      this.releaseDate,
+      this.vcode,
+      this.vlink,
+      this.trillerAvailable,
+      this.webp,
+      this.lyricsId});
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "type": type,
-        "song": song,
-        "album": album,
-        "year": year,
-        "music": music,
-        "music_id": musicId,
-        "primary_artists": primaryArtists,
-        "primary_artists_id": primaryArtistsId,
-        "featured_artists": featuredArtists,
-        "featured_artists_id": featuredArtistsId,
-        "singers": singers,
-        "starring": starring,
-        "image": image,
-        "label": label,
-        "albumid": albumid,
-        "language": language,
-        "origin": origin,
-        "play_count": playCount,
-        "copyright_text": copyrightText,
-        "320kbps": the320Kbps,
-        "is_dolby_content": isDolbyContent,
-        "explicit_content": explicitContent,
-        "has_lyrics": hasLyrics,
-        "lyrics_snippet": lyricsSnippet,
-        "encrypted_media_url": encryptedMediaUrl,
-        "encrypted_media_path": encryptedMediaPath,
-        "media_preview_url": mediaPreviewUrl,
-        "perma_url": permaUrl,
-        "album_url": albumUrl,
-        "duration": duration,
-        "rights": rights?.toJson(),
-        "webp": webp,
-        "starred": starred,
-        "artistMap": artistMap,
-        "release_date":
-            "${releaseDate?.year.toString().padLeft(4, '0')}-${releaseDate?.month.toString().padLeft(2, '0')}-${releaseDate?.day.toString().padLeft(2, '0')}",
-        "vcode": vcode,
-        "vlink": vlink,
-        "triller_available": trillerAvailable,
-        "label_url": labelUrl,
-      };
+  MoreInfo.fromJson(Map<String, dynamic> json) {
+    music = json['music'];
+    albumId = json['album_id'];
+    album = json['album'];
+    label = json['label'];
+    origin = json['origin'];
+    isDolbyContent = json['is_dolby_content'];
+    s320kbps = json['320kbps'];
+    encryptedMediaUrl = json['encrypted_media_url'];
+    encryptedCacheUrl = json['encrypted_cache_url'];
+    albumUrl = json['album_url'];
+    duration = json['duration'];
+    rights = json['rights'] != null ? Rights.fromJson(json['rights']) : null;
+    cacheState = json['cache_state'];
+    hasLyrics = json['has_lyrics'];
+    lyricsSnippet = json['lyrics_snippet'];
+    starred = json['starred'];
+    copyrightText = json['copyright_text'];
+    artistMap = json['artistMap'] != null ? ArtistMap.fromJson(json['artistMap']) : null;
+    releaseDate = json['release_date'];
+    vcode = json['vcode'];
+    vlink = json['vlink'];
+    trillerAvailable = json['triller_available'];
+    webp = json['webp'];
+    lyricsId = json['lyrics_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['music'] = music;
+    data['album_id'] = albumId;
+    data['album'] = album;
+    data['label'] = label;
+    data['origin'] = origin;
+    data['is_dolby_content'] = isDolbyContent;
+    data['320kbps'] = s320kbps;
+    data['encrypted_media_url'] = encryptedMediaUrl;
+    data['encrypted_cache_url'] = encryptedCacheUrl;
+    data['album_url'] = albumUrl;
+    data['duration'] = duration;
+    if (rights != null) {
+      data['rights'] = rights!.toJson();
+    }
+    data['cache_state'] = cacheState;
+    data['has_lyrics'] = hasLyrics;
+    data['lyrics_snippet'] = lyricsSnippet;
+    data['starred'] = starred;
+    data['copyright_text'] = copyrightText;
+    if (artistMap != null) {
+      data['artistMap'] = artistMap!.toJson();
+    }
+    data['release_date'] = releaseDate;
+    data['vcode'] = vcode;
+    data['vlink'] = vlink;
+    data['triller_available'] = trillerAvailable;
+    data['webp'] = webp;
+    data['lyrics_id'] = lyricsId;
+    return data;
+  }
+
+  String get encodedUrl {
+    return Uri.encodeComponent(encryptedMediaUrl ?? "");
+  }
 }
 
 class Rights {
-  Rights({
-    this.code,
-    required this.reason,
-    this.cacheable = true,
-    this.deleteCachedObject = false,
-  });
+  String? code;
+  String? cacheable;
+  String? deleteCachedObject;
+  String? reason;
 
-  int? code;
-  String reason;
-  bool cacheable;
-  bool deleteCachedObject;
+  Rights({this.code, this.cacheable, this.deleteCachedObject, this.reason});
 
-  factory Rights.fromJson(Map<String, dynamic> json) => Rights(
-        code: json["code"],
-        reason: json["reason"],
-        cacheable: json["cacheable"],
-        deleteCachedObject: json["delete_cached_object"],
-      );
+  Rights.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    cacheable = json['cacheable'];
+    deleteCachedObject = json['delete_cached_object'];
+    reason = json['reason'];
+  }
 
-  Map<String, dynamic> toJson() => {
-        "code": code,
-        "reason": reason,
-        "cacheable": cacheable,
-        "delete_cached_object": deleteCachedObject,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['code'] = code;
+    data['cacheable'] = cacheable;
+    data['delete_cached_object'] = deleteCachedObject;
+    data['reason'] = reason;
+    return data;
+  }
 }

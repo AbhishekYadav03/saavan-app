@@ -1,31 +1,29 @@
-import 'artist_map.dart';
+import 'package:saavan_app/models/artist_map.dart';
 
 class AlbumMoreInfo {
   AlbumMoreInfo({
-    this.songCount,
-    this.releaseDate,
     this.artistMap,
+    this.songCount,
+    this.copyrightText,
+    this.isDolbyContent = false,
   });
 
-  String? songCount;
-  DateTime? releaseDate;
   ArtistMap? artistMap;
+  String? songCount;
+  String? copyrightText;
+  bool isDolbyContent;
 
   factory AlbumMoreInfo.fromJson(Map<String, dynamic> json) => AlbumMoreInfo(
+        artistMap: json["artistMap"] != null ? ArtistMap.fromJson(json["artistMap"]) : null,
         songCount: json["song_count"],
-        releaseDate: json["release_date"] != null &&
-                json["release_date"].toString() != ""
-            ? DateTime.parse(json["release_date"])
-            : null,
-        artistMap: json["artistMap"] != null
-            ? ArtistMap.fromJson(json["artistMap"])
-            : null,
+        copyrightText: json["copyright_text"],
+        isDolbyContent: json["is_dolby_content"] ?? false,
       );
 
   Map<String, dynamic> toJson() => {
-        "song_count": songCount,
-        "release_date":
-            "${releaseDate?.year.toString().padLeft(4, '0')}-${releaseDate?.month.toString().padLeft(2, '0')}-${releaseDate?.day.toString().padLeft(2, '0')}",
         "artistMap": artistMap?.toJson(),
+        "song_count": songCount,
+        "copyright_text": copyrightText,
+        "is_dolby_content": isDolbyContent,
       };
 }

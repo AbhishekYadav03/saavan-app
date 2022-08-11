@@ -1,5 +1,6 @@
 import 'package:saavan_app/ui/imports.dart';
 
+
 void main() {
   runApp(const MyApp());
 }
@@ -20,6 +21,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SearchListViewModel>(
           create: (_) => SearchListViewModel(),
         ),
+        ChangeNotifierProvider<AudioPlayerPageViewModel>(
+          create: (_) => AudioPlayerPageViewModel(),
+        ),
       ],
       child: MaterialApp(
         title: 'Music App',
@@ -35,6 +39,8 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => const HomePage());
             case AlbumInfoPage.route:
               return MaterialPageRoute(builder: (_) => const AlbumInfoPage());
+            case AudioPlayerPage.route:
+              return MaterialPageRoute(builder: (_) => const AudioPlayerPage());
             default:
               throw Exception('Invalid route Name: ${settings.name}');
           }
