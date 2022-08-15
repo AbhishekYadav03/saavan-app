@@ -12,12 +12,11 @@ class AudioPlayerPageViewModel with ChangeNotifier {
     return AudioPlayer();
   }
 
-  AudioPlayer get player => _player;
+  final AudioPlayer player = AudioPlayer();
 
   List<Song> songs = [];
 
   int _currentIndex = 0;
-
   int get currentIndex => _currentIndex;
 
   set currentIndex(int index) {
@@ -43,14 +42,16 @@ class AudioPlayerPageViewModel with ChangeNotifier {
 
   void _getSongUrl(String encodedUrl) async {
     // __call=song.generateAuthToken&url=&bitrate=320&api_version=4&_format=json&ctx=web6dot0&_marker=0
-    String bitrate = "&bitrate=320";
+    String bitrate = "&bitrate=160";
     String params = Urls.songUrlInfo + (encodedUrl) + bitrate + Urls.appVersion + Urls.jsonFormat;
     var response = await ApiService.getData(path: params);
     if (response is Success) {
       var data = songUrlFromJson(response.data.toString());
       currentSongUrl = data;
       if (currentSongUrl?.authUrl != null) {
-        _play(currentSongUrl?.authUrl ?? '');
+        //_setSongSource("https://sdlhivkecdnems02.cdnsrv.jio.com/jiosaavn.cdn.jio.com/440/54d9e770352c3ada19df81d35273c992_96.mp4");
+        // _setSongSource("https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3");
+        _setSongSource(currentSongUrl?.authUrl ?? '');
       }
 
       print("song.generateAuthToken : ${data.authUrl}");
@@ -59,17 +60,25 @@ class AudioPlayerPageViewModel with ChangeNotifier {
     }
   }
 
-  void _play(String authUrl) async {
-    // Catching errors at load time
+  void _setSongSource(String authUrl) async {
+    await player.setAudioSource(AudioSource.uri(Uri.parse(authUrl)));
+    play();
+  }
+
+  void play() async {
     try {
-      print("Error code: 200");
-      await _player.setAudioSource(
-          AudioSource.uri(Uri.parse("https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")));
-      print("Error code: 400");
+      player.play();
+      // Catching errors during playback (e.g. lost network connection)
+      player.playbackEventStream.listen((event) {}, onError: (Object e, StackTrace st) {
+        if (e is PlayerException) {
+          print('Error code: ${e.code}');
+          print('Error message: ${e.message}');
+        } else {
+          print('An error occurred: $e');
+        }
+      });
 
-      /*  await player.play();
-      _listen();*/
-
+      _listen();
     } on PlayerException catch (e) {
       // iOS/macOS: maps to NSError.code
       // Android: maps to ExoPlayerException.type
@@ -90,15 +99,10 @@ class AudioPlayerPageViewModel with ChangeNotifier {
       // Fallback for all other errors
       print('An error occured: $e');
     }
-    // Catching errors during playback (e.g. lost network connection)
-    player.playbackEventStream.listen((event) {}, onError: (Object e, StackTrace st) {
-      if (e is PlayerException) {
-        print('Error code: ${e.code}');
-        print('Error message: ${e.message}');
-      } else {
-        print('An error occurred: $e');
-      }
-    });
+  }
+
+  void seekTo(Duration pos) async {
+    await player.seek(pos);
   }
 
   void _listen() {
@@ -106,18 +110,26 @@ class AudioPlayerPageViewModel with ChangeNotifier {
       switch (state.processingState) {
         case ProcessingState.idle:
           print("idle");
+          notifyListeners();
           break;
         case ProcessingState.loading:
           print("loading");
+          notifyListeners();
           break;
         case ProcessingState.buffering:
           print("buffering");
+          notifyListeners();
+
           break;
         case ProcessingState.ready:
           print("ready");
+          notifyListeners();
+
           break;
         case ProcessingState.completed:
+          setNextSong();
           print("completed");
+          notifyListeners();
           break;
       }
     });

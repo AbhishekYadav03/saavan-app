@@ -4,6 +4,13 @@ extension CutomExtentions on String {
     return "${(duration / 60).floor()}m ${duration % 60}s";
   }
 
+  String get parsePlayerDuration {
+    int duration = int.parse(this);
+    String m = "${(duration / 60).floor()}";
+    String s = "${duration % 60}";
+    return "${m.padLeft(2, "0")}:${s.padLeft(2, "0")}";
+  }
+
   String get parseDurationLong {
     int duration = int.parse(this);
     return "${(duration / 60).floor()} Minute ${duration % 60} Seconds";

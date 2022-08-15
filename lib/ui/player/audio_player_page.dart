@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:just_audio/just_audio.dart';
 import 'package:saavan_app/ui/home/home.dart';
 import 'package:saavan_app/ui/imports.dart';
 
@@ -120,36 +119,54 @@ class AudioPlayerPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 60),
-                  Slider(
-                    thumbColor: Colors.white,
-                    activeColor: Colors.white,
-                    inactiveColor: Colors.white24,
-                    min: 20,
-                    max: 120,
-                    value: 30,
-                    onChanged: (val) {},
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "00:30",
-                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                  StreamBuilder<Duration>(
+                    stream: view.player.positionStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        Duration position = snapshot.data ?? Duration.zero;
+                        Duration duration = view.player.duration ?? Duration.zero;
+
+                        return Column(
+                          children: [
+                            Slider(
+                              thumbColor: Colors.white,
+                              activeColor: Colors.white,
+                              inactiveColor: Colors.white24,
+                              min: 0,
+                              max: duration.inSeconds.toDouble(),
+                              value: position.inSeconds.toDouble(),
+                              onChanged: (val) {
+                                Duration position = Duration(seconds: val.floor());
+                                view.seekTo(position);
+                              },
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    position.inSeconds.toString().parsePlayerDuration,
+                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                  ),
+                                  Text(
+                                    duration.inSeconds.toString().parsePlayerDuration,
+                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                  ),
+                                ],
                               ),
-                        ),
-                        Text(
-                          "03:33",
-                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                        ),
-                      ],
-                    ),
+                            ),
+                          ],
+                        );
+                      }
+                      return const SizedBox();
+                    },
                   ),
                   const SizedBox(height: 80),
                   Row(
@@ -209,12 +226,16 @@ class AudioPlayerPage extends StatelessWidget {
                               child: Material(
                                 color: Colors.transparent,
                                 child: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    if (view.player.playing) {
+                                      view.player.pause();
+                                    } else {
+                                      view.player.play();
+                                    }
+                                  },
                                   splashRadius: 24,
                                   icon: Icon(
-                                    view.player.playing
-                                        ? Icons.pause_circle_outline_rounded
-                                        : Icons.play_arrow_rounded,
+                                    !view.player.playing ? Icons.play_arrow_rounded : Icons.pause_rounded,
                                     color: Colors.white,
                                     size: 34,
                                   ),
@@ -252,9 +273,7 @@ class AudioPlayerPage extends StatelessWidget {
                               size: 34,
                             ),
                             splashRadius: 24,
-                            onPressed: () {
-                              view.player.play();
-                            },
+                            onPressed: () {},
                           ),
                         ),
                       ),
