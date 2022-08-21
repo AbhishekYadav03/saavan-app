@@ -66,6 +66,11 @@ class HomeViewModel with ChangeNotifier {
     }
   }
 
+  Future<void> onRefresh() async {
+    getHomeData();
+    getTrendingData();
+  }
+
   Future<void> getTrendingData() async {
     var response = await ApiService.getData(path: Urls.trending);
     if (response is Success) {

@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 
 class AppInterceptors extends Interceptor {
@@ -20,7 +19,7 @@ class AppInterceptors extends Interceptor {
           case 401:
             throw UnauthorizedException(err.requestOptions);
           case 404:
-              throw NotFoundException(err.requestOptions);
+            throw NotFoundException(err.requestOptions);
           case 409:
             throw ConflictException(err.requestOptions);
           case 500:
@@ -35,6 +34,28 @@ class AppInterceptors extends Interceptor {
 
     return handler.next(err);
   }
+
+  // @override
+  // void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  //   print("--> ${options.method.toUpperCase()} ${"" + (options.baseUrl) + (options.path)}");
+  //   print("Headers:");
+  //   options.headers.forEach((k, v) => print('$k: $v'));
+  //   print("queryParameters:");
+  //   options.queryParameters.forEach((k, v) => print('$k: $v'));
+  //   if (options.data != null) {
+  //     print("Body: ${options.data}");
+  //   }
+  //   print("--> END ${options.method.toUpperCase()}");
+  // }
+
+  // @override
+  // void onResponse(Response response, ResponseInterceptorHandler handler) {
+  //   print("<-- ${response.statusCode} ${(response.realUri)}");
+  //   print("Headers:");
+  //   response.headers.forEach((k, v) => print('$k: $v'));
+  //   print("Response: ${response.data}");
+  //   print("<-- END HTTP");
+  // }
 }
 
 class BadRequestException extends DioError {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:saavan_app/ui/imports.dart';
 
@@ -28,6 +30,20 @@ class ApiService {
       return ApiError(massage: e.toString());
     }
   }
+
+  static Future<String?> getUrlLocation(String url) async {
+    //final client = HttpClient();
+    var uri = Uri.parse(url);
+    var request = await ApiClient().dio.getUri(
+          uri,
+          options: Options(
+              followRedirects: false,
+              validateStatus: (int? status) {
+                return ((status ?? 0) < 500);
+              }),
+        );
+    return request.headers.value(HttpHeaders.locationHeader);
+  }
 }
 
 class ApiClient {
@@ -48,9 +64,9 @@ class ApiClient {
       sendTimeout: 15000,
     ));
 
-    dio.interceptors.addAll({
-      AppInterceptors(dio),
-    });
+    // dio.interceptors.addAll({
+    //   AppInterceptors(dio),
+    // });
     return dio;
   }
 }

@@ -8,10 +8,6 @@ import 'package:saavan_app/models/song.dart';
 import 'package:saavan_app/models/song_url.dart';
 
 class AudioPlayerPageViewModel with ChangeNotifier {
-  AudioPlayer get _player {
-    return AudioPlayer();
-  }
-
   final AudioPlayer player = AudioPlayer();
 
   List<Song> songs = [];
@@ -26,21 +22,33 @@ class AudioPlayerPageViewModel with ChangeNotifier {
   }
 
   Song get currentSong => songs.elementAt(currentIndex);
-  SongUrl? currentSongUrl;
 
   void setNextSong() {
     if (currentIndex >= 0 && songs.length - 1 != currentIndex) {
       currentIndex = currentIndex + 1;
+      player.pause();
+      print(currentIndex);
+    }
+  }
+
+  void setNextSongOnly() {
+    if (currentIndex >= 0 && songs.length - 1 != currentIndex) {
+      print(currentIndex);
+      _currentIndex = _currentIndex + 1;
+      _getSongUrl(currentSong.moreInfo?.encodedUrl ?? "");
     }
   }
 
   void setPreviousSong() {
     if (currentIndex > 0) {
       currentIndex = currentIndex - 1;
+      player.pause();
     }
   }
 
   void _getSongUrl(String encodedUrl) async {
+    SongUrl currentSongUrl;
+
     // __call=song.generateAuthToken&url=&bitrate=320&api_version=4&_format=json&ctx=web6dot0&_marker=0
     String bitrate = "&bitrate=160";
     String params = Urls.songUrlInfo + (encodedUrl) + bitrate + Urls.appVersion + Urls.jsonFormat;
@@ -48,13 +56,13 @@ class AudioPlayerPageViewModel with ChangeNotifier {
     if (response is Success) {
       var data = songUrlFromJson(response.data.toString());
       currentSongUrl = data;
-      if (currentSongUrl?.authUrl != null) {
+      if (currentSongUrl.authUrl != null) {
         //_setSongSource("https://sdlhivkecdnems02.cdnsrv.jio.com/jiosaavn.cdn.jio.com/440/54d9e770352c3ada19df81d35273c992_96.mp4");
         // _setSongSource("https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3");
-        _setSongSource(currentSongUrl?.authUrl ?? '');
+        String songUrl = await ApiService.getUrlLocation(currentSongUrl.authUrl ?? '') ?? '';
+        _setSongSource(songUrl);
+        print("song.generateAuthToken : $songUrl");
       }
-
-      print("song.generateAuthToken : ${data.authUrl}");
     } else if (response is ApiError) {
       print(response.massage);
     }
@@ -63,6 +71,7 @@ class AudioPlayerPageViewModel with ChangeNotifier {
   void _setSongSource(String authUrl) async {
     await player.setAudioSource(AudioSource.uri(Uri.parse(authUrl)));
     play();
+   notifyListeners();
   }
 
   void play() async {
@@ -78,7 +87,7 @@ class AudioPlayerPageViewModel with ChangeNotifier {
         }
       });
 
-      _listen();
+      // _listen();
     } on PlayerException catch (e) {
       // iOS/macOS: maps to NSError.code
       // Android: maps to ExoPlayerException.type
@@ -103,35 +112,5 @@ class AudioPlayerPageViewModel with ChangeNotifier {
 
   void seekTo(Duration pos) async {
     await player.seek(pos);
-  }
-
-  void _listen() {
-    player.playerStateStream.listen((state) {
-      switch (state.processingState) {
-        case ProcessingState.idle:
-          print("idle");
-          notifyListeners();
-          break;
-        case ProcessingState.loading:
-          print("loading");
-          notifyListeners();
-          break;
-        case ProcessingState.buffering:
-          print("buffering");
-          notifyListeners();
-
-          break;
-        case ProcessingState.ready:
-          print("ready");
-          notifyListeners();
-
-          break;
-        case ProcessingState.completed:
-          setNextSong();
-          print("completed");
-          notifyListeners();
-          break;
-      }
-    });
   }
 }

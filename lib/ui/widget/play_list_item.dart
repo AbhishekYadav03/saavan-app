@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:saavan_app/ui/imports.dart';
 
 class PLayListItem extends StatelessWidget {
@@ -16,14 +15,17 @@ class PLayListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ClipRRect(
-            child: Image(
-              fit: BoxFit.cover,
-              image: NetworkImage(
-                chart?.image ??
-                    "https://sdlhivkecdnems05.cdnsrv.jio.com/c.saavncdn.com/editorial/wt15-49_20220715122650_500x500.jpg",
-              ),
+            child: CachedNetworkImage(
+              imageUrl: chart?.image ??
+                  "https://sdlhivkecdnems05.cdnsrv.jio.com/c.saavncdn.com/editorial/wt15-49_20220715122650_500x500.jpg",
               width: 150,
               height: 90,
+              progressIndicatorBuilder: (context, url, downloadProgress) {
+                return Center(
+                  child: CircularProgressIndicator(value: downloadProgress.progress),
+                );
+              },
+              errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
             ),
             borderRadius: BorderRadius.circular(8),
           ),

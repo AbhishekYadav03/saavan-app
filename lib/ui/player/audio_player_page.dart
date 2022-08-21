@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:just_audio/just_audio.dart';
 import 'package:saavan_app/ui/home/home.dart';
 import 'package:saavan_app/ui/imports.dart';
 
@@ -128,17 +129,37 @@ class AudioPlayerPage extends StatelessWidget {
 
                         return Column(
                           children: [
-                            Slider(
-                              thumbColor: Colors.white,
-                              activeColor: Colors.white,
-                              inactiveColor: Colors.white24,
-                              min: 0,
-                              max: duration.inSeconds.toDouble(),
-                              value: position.inSeconds.toDouble(),
-                              onChanged: (val) {
-                                Duration position = Duration(seconds: val.floor());
-                                view.seekTo(position);
-                              },
+                            Stack(
+                              children: [
+                                IgnorePointer(
+                                  child: SliderTheme(
+                                    data: Theme.of(context).sliderTheme.copyWith(
+                                          thumbShape: SliderComponentShape.noThumb,
+                                          trackHeight: 2.0,
+                                          trackShape: const RoundedRectSliderTrackShape(),
+                                          inactiveTrackColor: Colors.transparent,
+                                        ),
+                                    child: Slider(
+                                      min: 0,
+                                      max: duration.inSeconds.toDouble(),
+                                      value: view.player.bufferedPosition.inSeconds.toDouble(),
+                                      onChanged: (val) {},
+                                    ),
+                                  ),
+                                ),
+                                Slider(
+                                  thumbColor: Colors.white,
+                                  activeColor: Colors.white,
+                                  inactiveColor: Colors.white24,
+                                  min: 0,
+                                  max: duration.inSeconds.toDouble(),
+                                  value: position.inSeconds.toDouble(),
+                                  onChanged: (val) {
+                                    Duration position = Duration(seconds: val.floor());
+                                    view.seekTo(position);
+                                  },
+                                ),
+                              ],
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -203,48 +224,62 @@ class AudioPlayerPage extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        height: 48,
-                        width: 48,
-                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24)),
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              height: 48,
-                              width: 48,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(24),
-                                child: BackdropFilter(
-                                  filter: ImageFilter.blur(sigmaX: 32, sigmaY: 32),
-                                  child: Container(
-                                    color: Colors.black.withOpacity(0),
-                                  ),
+                      StreamBuilder<PlayerState>(
+                          stream: view.player.playerStateStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              ProcessingState? processingState=snapshot.data?.processingState;
+                              if (processingState == ProcessingState.completed) {
+                                print(snapshot.data?.processingState);
+                                view.setNextSongOnly();
+                              }
+                              return Container(
+                                height: 48,
+                                width: 48,
+                                decoration:
+                                    BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24)),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      height: 48,
+                                      width: 48,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(24),
+                                        child: BackdropFilter(
+                                          filter: ImageFilter.blur(sigmaX: 32, sigmaY: 32),
+                                          child: Container(
+                                            color: Colors.black.withOpacity(0),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: IconButton(
+                                          onPressed: () {
+                                            if (view.player.playing) {
+                                              view.player.pause();
+                                            } else {
+                                              view.player.play();
+                                            }
+                                          },
+                                          splashRadius: 24,
+                                          icon: Icon(
+                                            !view.player.playing ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                                            color: Colors.white,
+                                            size: 34,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ),
-                            Center(
-                              child: Material(
-                                color: Colors.transparent,
-                                child: IconButton(
-                                  onPressed: () {
-                                    if (view.player.playing) {
-                                      view.player.pause();
-                                    } else {
-                                      view.player.play();
-                                    }
-                                  },
-                                  splashRadius: 24,
-                                  icon: Icon(
-                                    !view.player.playing ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                                    color: Colors.white,
-                                    size: 34,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                              );
+                            }
+
+                            return const SizedBox();
+                          }),
                       const Spacer(),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
