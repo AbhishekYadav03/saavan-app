@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class AppInterceptors extends Interceptor {
   final Dio dio;
@@ -35,27 +36,34 @@ class AppInterceptors extends Interceptor {
     return handler.next(err);
   }
 
-  // @override
-  // void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-  //   print("--> ${options.method.toUpperCase()} ${"" + (options.baseUrl) + (options.path)}");
-  //   print("Headers:");
-  //   options.headers.forEach((k, v) => print('$k: $v'));
-  //   print("queryParameters:");
-  //   options.queryParameters.forEach((k, v) => print('$k: $v'));
-  //   if (options.data != null) {
-  //     print("Body: ${options.data}");
-  //   }
-  //   print("--> END ${options.method.toUpperCase()}");
-  // }
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    if (kDebugMode) {
+      print("--> ${options.method.toUpperCase()} ${"" + (options.baseUrl) + (options.path)}");
+      print("Headers:");
+      options.headers.forEach((k, v) => print('$k: $v'));
+      print("queryParameters:");
+      options.queryParameters.forEach((k, v) => print('$k: $v'));
+      if (options.data != null) {
+        print("Body: ${options.data}");
+      }
+      print("--> END ${options.method.toUpperCase()}");
+    }
+    return handler.next(options);
+  }
 
-  // @override
-  // void onResponse(Response response, ResponseInterceptorHandler handler) {
-  //   print("<-- ${response.statusCode} ${(response.realUri)}");
-  //   print("Headers:");
-  //   response.headers.forEach((k, v) => print('$k: $v'));
-  //   print("Response: ${response.data}");
-  //   print("<-- END HTTP");
-  // }
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    if (kDebugMode) {
+      print("<-- ${response.statusCode} ${(response.realUri)}");
+      print("Headers:");
+      response.headers.forEach((k, v) => print('$k: $v'));
+      print("Response: ${response.data.toString().trim()}");
+      print("<-- END HTTP");
+    }
+
+    return handler.next(response);
+  }
 }
 
 class BadRequestException extends DioError {

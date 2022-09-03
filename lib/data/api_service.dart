@@ -32,7 +32,6 @@ class ApiService {
   }
 
   static Future<String?> getUrlLocation(String url) async {
-    //final client = HttpClient();
     var uri = Uri.parse(url);
     var request = await ApiClient().dio.getUri(
           uri,
@@ -64,9 +63,9 @@ class ApiClient {
       sendTimeout: 15000,
     ));
 
-    // dio.interceptors.addAll({
-    //   AppInterceptors(dio),
-    // });
+    dio.interceptors.addAll({
+      AppInterceptors(dio),
+    });
     return dio;
   }
 }

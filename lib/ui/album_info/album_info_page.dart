@@ -1,4 +1,5 @@
 import 'package:saavan_app/ui/imports.dart';
+import 'package:saavan_app/ui/widget/mini_player.dart';
 
 class AlbumInfoPage extends StatelessWidget {
   static const String route = "AlbumInfoPage";
@@ -143,6 +144,7 @@ class AlbumInfoPage extends StatelessWidget {
           );
         },
       ),
+      bottomSheet: const MiniPlayer(),
     );
   }
 }

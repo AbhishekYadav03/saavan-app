@@ -1,6 +1,5 @@
 import 'package:saavan_app/ui/imports.dart';
-
-export 'package:saavan_app/ui/imports.dart';
+import 'package:saavan_app/ui/widget/mini_player.dart';
 
 class HomePage extends StatelessWidget {
   static const String route = "HomePage";
@@ -147,6 +146,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
+      bottomSheet: const MiniPlayer(),
     );
   }
 }

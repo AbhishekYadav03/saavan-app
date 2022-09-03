@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:saavan_app/models/chart.dart';
-import 'package:saavan_app/ui/home/home.dart';
 import 'package:saavan_app/ui/home/home_view_model.dart';
 import 'package:saavan_app/ui/widget/play_list_item.dart';
+
+import '../imports.dart';
 
 class TopCharts extends StatelessWidget {
   const TopCharts({Key? key}) : super(key: key);
@@ -48,7 +49,6 @@ class TopCharts extends StatelessWidget {
                                   );
                                 },
                                 errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
-
                               ),
                               const SizedBox(height: 32),
                               Text(

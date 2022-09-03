@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:just_audio/just_audio.dart';
-import 'package:saavan_app/ui/home/home.dart';
 import 'package:saavan_app/ui/imports.dart';
+import 'package:saavan_app/ui/player/play_list_bottom_sheet.dart';
 
 class AudioPlayerPage extends StatelessWidget {
   static const String route = "AudioPlayerPage";
@@ -18,7 +18,7 @@ class AudioPlayerPage extends StatelessWidget {
                 width: double.infinity,
                 fit: BoxFit.cover,
                 height: MediaQuery.of(context).size.height,
-                imageUrl: view.currentSong.image ?? "",
+                imageUrl: view.currentSong?.image ?? "",
                 progressIndicatorBuilder: (context, url, downloadProgress) {
                   return Center(
                     child: CircularProgressIndicator(value: downloadProgress.progress),
@@ -41,12 +41,21 @@ class AudioPlayerPage extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(24),
-                        child: Icon(
-                          Icons.keyboard_arrow_down_outlined,
-                          size: 32,
-                          color: Colors.white,
+                      Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            splashRadius: 24,
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down_outlined,
+                              color: Colors.white,
+                              size: 32,
+                            ),
+                          ),
                         ),
                       ),
                       Expanded(
@@ -75,7 +84,7 @@ class AudioPlayerPage extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Text(
-                                view.currentSong.title ?? "",
+                                view.currentSong?.title ?? "",
                                 maxLines: 1,
                                 textAlign: TextAlign.center,
                                 overflow: TextOverflow.ellipsis,
@@ -88,7 +97,7 @@ class AudioPlayerPage extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Text(
-                                (view.currentSong.artistsName ?? "") + '\n',
+                                (view.currentSong?.artistsName ?? "") + '\n',
                                 maxLines: 2,
                                 textAlign: TextAlign.center,
                                 overflow: TextOverflow.ellipsis,
@@ -109,7 +118,7 @@ class AudioPlayerPage extends StatelessWidget {
                         width: 300,
                         fit: BoxFit.cover,
                         height: 300,
-                        imageUrl: view.currentSong.image?.replaceAll("150x150", "500x500") ?? "",
+                        imageUrl: view.currentSong?.image?.replaceAll("150x150", "500x500") ?? "",
                         progressIndicatorBuilder: (context, url, downloadProgress) {
                           return Center(
                             child: CircularProgressIndicator(value: downloadProgress.progress),
@@ -135,7 +144,7 @@ class AudioPlayerPage extends StatelessWidget {
                                   child: SliderTheme(
                                     data: Theme.of(context).sliderTheme.copyWith(
                                           thumbShape: SliderComponentShape.noThumb,
-                                          trackHeight: 2.0,
+                                          trackHeight: 1.0,
                                           trackShape: const RoundedRectSliderTrackShape(),
                                           inactiveTrackColor: Colors.transparent,
                                         ),
@@ -147,17 +156,24 @@ class AudioPlayerPage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Slider(
-                                  thumbColor: Colors.white,
-                                  activeColor: Colors.white,
-                                  inactiveColor: Colors.white24,
-                                  min: 0,
-                                  max: duration.inSeconds.toDouble(),
-                                  value: position.inSeconds.toDouble(),
-                                  onChanged: (val) {
-                                    Duration position = Duration(seconds: val.floor());
-                                    view.seekTo(position);
-                                  },
+                                SliderTheme(
+                                  data: Theme.of(context).sliderTheme.copyWith(
+                                        trackHeight: 1.0,
+                                        trackShape: const RoundedRectSliderTrackShape(),
+                                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
+                                      ),
+                                  child: Slider(
+                                    thumbColor: Colors.white,
+                                    activeColor: Colors.white,
+                                    inactiveColor: Colors.white24,
+                                    min: 0,
+                                    max: duration.inSeconds.toDouble(),
+                                    value: position.inSeconds.toDouble(),
+                                    onChanged: (val) {
+                                      Duration position = Duration(seconds: val.floor());
+                                      view.seekTo(position);
+                                    },
+                                  ),
                                 ),
                               ],
                             ),
@@ -228,7 +244,7 @@ class AudioPlayerPage extends StatelessWidget {
                           stream: view.player.playerStateStream,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              ProcessingState? processingState=snapshot.data?.processingState;
+                              ProcessingState? processingState = snapshot.data?.processingState;
                               if (processingState == ProcessingState.completed) {
                                 print(snapshot.data?.processingState);
                                 view.setNextSongOnly();
@@ -308,7 +324,18 @@ class AudioPlayerPage extends StatelessWidget {
                               size: 34,
                             ),
                             splashRadius: 24,
-                            onPressed: () {},
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isDismissible: true,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                builder: (BuildContext context) {
+                                  return const PlaylistBottomSheet();
+                                },
+                              );
+                            },
                           ),
                         ),
                       ),

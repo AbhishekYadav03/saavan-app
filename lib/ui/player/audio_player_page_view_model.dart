@@ -17,11 +17,11 @@ class AudioPlayerPageViewModel with ChangeNotifier {
 
   set currentIndex(int index) {
     _currentIndex = index;
-    _getSongUrl(currentSong.moreInfo?.encodedUrl ?? "");
+    _getSongUrl(currentSong?.moreInfo?.encodedUrl ?? "");
     notifyListeners();
   }
 
-  Song get currentSong => songs.elementAt(currentIndex);
+  Song? get currentSong => songs.elementAt(currentIndex);
 
   void setNextSong() {
     if (currentIndex >= 0 && songs.length - 1 != currentIndex) {
@@ -31,11 +31,17 @@ class AudioPlayerPageViewModel with ChangeNotifier {
     }
   }
 
+  void setIndexSong(int index) {
+    currentIndex = index;
+    player.pause();
+  }
+
   void setNextSongOnly() {
+    /// This is used for without notifying change the song.
     if (currentIndex >= 0 && songs.length - 1 != currentIndex) {
       print(currentIndex);
       _currentIndex = _currentIndex + 1;
-      _getSongUrl(currentSong.moreInfo?.encodedUrl ?? "");
+      _getSongUrl(currentSong?.moreInfo?.encodedUrl ?? "");
     }
   }
 
@@ -71,7 +77,7 @@ class AudioPlayerPageViewModel with ChangeNotifier {
   void _setSongSource(String authUrl) async {
     await player.setAudioSource(AudioSource.uri(Uri.parse(authUrl)));
     play();
-   notifyListeners();
+    notifyListeners();
   }
 
   void play() async {
