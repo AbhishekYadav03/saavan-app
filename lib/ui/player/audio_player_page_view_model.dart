@@ -57,7 +57,7 @@ class AudioPlayerPageViewModel with ChangeNotifier {
 
     // __call=song.generateAuthToken&url=&bitrate=320&api_version=4&_format=json&ctx=web6dot0&_marker=0
     String bitrate = "&bitrate=160";
-    String params = Urls.songUrlInfo + (encodedUrl) + bitrate + Urls.appVersion + Urls.jsonFormat;
+    String params = Urls.songUrlInfo + (encodedUrl) + bitrate + Urls.apiVersion + Urls.jsonFormat;
     var response = await ApiService.getData(path: params);
     if (response is Success) {
       var data = songUrlFromJson(response.data.toString());

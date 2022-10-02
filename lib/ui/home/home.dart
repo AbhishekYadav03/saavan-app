@@ -1,4 +1,5 @@
 import 'package:saavan_app/ui/imports.dart';
+import 'package:saavan_app/ui/search/search_page.dart';
 import 'package:saavan_app/ui/widget/mini_player.dart';
 
 class HomePage extends StatelessWidget {
@@ -23,6 +24,36 @@ class HomePage extends StatelessWidget {
                 sliver: SliverToBoxAdapter(
                   child: Column(
                     children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, SearchPage.route);
+                        },
+                        child: Hero(
+                          tag: "SearchBar",
+                          child: Container(
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 8),
+                                const Icon(
+                                  Icons.search_outlined,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 16),
+                                Text(
+                                  "Search",
+                                  style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -58,28 +89,6 @@ class HomePage extends StatelessWidget {
                           )
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      Container(
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 8),
-                            const Icon(
-                              Icons.search_outlined,
-                              color: Colors.grey,
-                            ),
-                            const SizedBox(width: 16),
-                            Text(
-                              "Search",
-                              style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 ),

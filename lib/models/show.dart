@@ -1,7 +1,7 @@
-import 'package:saavan_app/models/play_list_more_info.dart';
+import 'package:saavan_app/models/show_more_info.dart';
 
-class PlaylistInfo {
-  PlaylistInfo({
+class Show {
+  Show({
     this.id,
     this.title,
     this.subtitle,
@@ -10,7 +10,7 @@ class PlaylistInfo {
     this.permaUrl,
     this.moreInfo,
     this.explicitContent,
-    this.miniObj = true,
+    this.miniObj,
     this.description,
   });
 
@@ -20,19 +20,19 @@ class PlaylistInfo {
   String? type;
   String? image;
   String? permaUrl;
-  PlaylistMoreInfo? moreInfo;
+  ShowMoreInfo? moreInfo;
   String? explicitContent;
   bool? miniObj;
   String? description;
 
-  factory PlaylistInfo.fromJson(Map<String, dynamic> json) => PlaylistInfo(
+  factory Show.fromJson(Map<String, dynamic> json) => Show(
         id: json["id"],
         title: json["title"],
         subtitle: json["subtitle"],
         type: json["type"],
         image: json["image"],
         permaUrl: json["perma_url"],
-        moreInfo: json["more_info"] != null ? PlaylistMoreInfo.fromJson(json["more_info"]) : null,
+        moreInfo: ShowMoreInfo.fromJson(json["more_info"]),
         explicitContent: json["explicit_content"],
         miniObj: json["mini_obj"],
         description: json["description"],

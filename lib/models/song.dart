@@ -15,36 +15,29 @@ class Song {
   String? listCount;
   String? listType;
   String? list;
-  MoreInfo? moreInfo;
+  SongMoreInfo? moreInfo;
+  bool? miniObj;
+  String? description;
 
-  Song(
-      {this.id,
-      this.title,
-      this.subtitle,
-      this.headerDesc,
-      this.type,
-      this.permaUrl,
-      this.image,
-      this.language,
-      this.year,
-      this.playCount,
-      this.explicitContent,
-      this.listCount,
-      this.listType,
-      this.list,
-      this.moreInfo});
-
-  String? get artistsName {
-    String? names = "";
-    moreInfo?.artistMap?.primaryArtists?.asMap().forEach((index, artist) {
-      if (index == (moreInfo?.artistMap?.primaryArtists?.length ?? 0) - 1) {
-        names = "$names ${artist.name}";
-      } else {
-        names = "$names ${artist.name},";
-      }
-    });
-    return names;
-  }
+  Song({
+    this.id,
+    this.title,
+    this.subtitle,
+    this.headerDesc,
+    this.type,
+    this.permaUrl,
+    this.image,
+    this.language,
+    this.year,
+    this.playCount,
+    this.explicitContent,
+    this.listCount,
+    this.listType,
+    this.list,
+    this.moreInfo,
+    this.miniObj,
+    this.description,
+  });
 
   Song.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -61,7 +54,9 @@ class Song {
     listCount = json['list_count'];
     listType = json['list_type'];
     list = json['list'];
-    moreInfo = json['more_info'] != null ? MoreInfo.fromJson(json['more_info']) : null;
+    miniObj = json["mini_obj"];
+    description = json["description"];
+    moreInfo = json['more_info'] != null ? SongMoreInfo.fromJson(json['more_info']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -80,14 +75,28 @@ class Song {
     data['list_count'] = listCount;
     data['list_type'] = listType;
     data['list'] = list;
+    data['mini_obj'] = miniObj;
+    data['description'] = description;
     if (moreInfo != null) {
       data['more_info'] = moreInfo!.toJson();
     }
     return data;
   }
+
+  String? get artistsName {
+    String? names = "";
+    moreInfo?.artistMap?.primaryArtists?.asMap().forEach((index, artist) {
+      if (index == (moreInfo?.artistMap?.primaryArtists?.length ?? 0) - 1) {
+        names = "$names ${artist.name}";
+      } else {
+        names = "$names ${artist.name},";
+      }
+    });
+    return names;
+  }
 }
 
-class MoreInfo {
+class SongMoreInfo {
   String? music;
   String? albumId;
   String? album;
@@ -112,8 +121,14 @@ class MoreInfo {
   bool? trillerAvailable;
   String? webp;
   String? lyricsId;
+  int? ctr;
+  String? score;
+  String? primaryArtists;
+  String? singers;
+  dynamic videoAvailable;
+  String? language;
 
-  MoreInfo(
+  SongMoreInfo(
       {this.music,
       this.albumId,
       this.album,
@@ -137,9 +152,15 @@ class MoreInfo {
       this.vlink,
       this.trillerAvailable,
       this.webp,
+      this.ctr,
+      this.score,
+      this.primaryArtists,
+      this.singers,
+      this.videoAvailable,
+      this.language,
       this.lyricsId});
 
-  MoreInfo.fromJson(Map<String, dynamic> json) {
+  SongMoreInfo.fromJson(Map<String, dynamic> json) {
     music = json['music'];
     albumId = json['album_id'];
     album = json['album'];
@@ -164,6 +185,12 @@ class MoreInfo {
     trillerAvailable = json['triller_available'];
     webp = json['webp'];
     lyricsId = json['lyrics_id'];
+    ctr = json["ctr"];
+    score = json["score"];
+    primaryArtists = json["primary_artists"];
+    singers = json["singers"];
+    videoAvailable = json["video_available"];
+    language = json["language"];
   }
 
   Map<String, dynamic> toJson() {
@@ -196,6 +223,12 @@ class MoreInfo {
     data['triller_available'] = trillerAvailable;
     data['webp'] = webp;
     data['lyrics_id'] = lyricsId;
+    data['ctr'] = ctr;
+    data['score'] = score;
+    data['primary_artists'] = primaryArtists;
+    data['singers'] = singers;
+    data['video_available'] = videoAvailable;
+    data['language'] = language;
     return data;
   }
 

@@ -1,5 +1,5 @@
 import 'package:saavan_app/ui/imports.dart';
-
+import 'package:saavan_app/ui/search/search_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,6 +41,8 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => const AlbumInfoPage());
             case AudioPlayerPage.route:
               return MaterialPageRoute(builder: (_) => const AudioPlayerPage());
+            case SearchPage.route:
+              return MaterialPageRoute(builder: (_) => const SearchPage());
             default:
               throw Exception('Invalid route Name: ${settings.name}');
           }

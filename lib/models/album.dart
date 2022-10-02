@@ -8,9 +8,11 @@ import 'package:saavan_app/models/album_more_info.dart';
 import 'package:saavan_app/models/song.dart';
 
 List<Album> albumsFromJson(String str) => List<Album>.from(json.decode(str).map((x) => Album.fromJson(x)));
+
 String albumsToJson(List<Album> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 Album albumFromJson(String str) => Album.fromJson(json.decode(str));
+
 String albumToJson(Album data) => json.encode(data.toJson());
 
 class Album {
@@ -28,6 +30,8 @@ class Album {
     this.explicitContent,
     this.listCount,
     this.listType,
+    this.description,
+    this.miniObj,
     this.song,
     this.moreInfo,
   });
@@ -45,6 +49,8 @@ class Album {
   String? explicitContent;
   String? listCount;
   String? listType;
+  String? description;
+  bool? miniObj;
   List<Song>? song;
   AlbumMoreInfo? moreInfo;
 
@@ -62,7 +68,11 @@ class Album {
         explicitContent: json["explicit_content"],
         listCount: json["list_count"],
         listType: json["list_type"],
-        song: json["list"].toString() != "" ? List<Song>.from(json["list"].map((x) => Song.fromJson(x))) : [],
+        description: json["description"],
+        miniObj: json["mini_obj"],
+        song: json["list"] != null && json["list"] != ""
+            ? List<Song>.from(json["list"].map((x) => Song.fromJson(x)))
+            : null,
         moreInfo: json["more_info"] != null ? AlbumMoreInfo.fromJson(json["more_info"]) : null,
       );
 
@@ -80,7 +90,9 @@ class Album {
         "explicit_content": explicitContent,
         "list_count": listCount,
         "list_type": listType,
-        "Song": song != null ? List<dynamic>.from(song!.map((x) => x.toJson())) : [],
+        "description": description,
+        "mini_obj": miniObj,
+        "Song": song != null ? List<dynamic>.from(song!.map((x) => x.toJson())) : null,
         "more_info": moreInfo?.toJson(),
       };
 }

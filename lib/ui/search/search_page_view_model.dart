@@ -4,10 +4,10 @@ import 'package:saavan_app/data/urls.dart';
 import 'package:saavan_app/models/response/api_error.dart';
 import 'package:saavan_app/models/response/api_success.dart';
 import 'package:saavan_app/models/search_response.dart';
+import 'package:saavan_app/ui/imports.dart';
 
 class SearchListViewModel with ChangeNotifier {
   SearchResponse? _searchData;
-
   SearchResponse? get searchData => _searchData;
 
   set searchData(SearchResponse? response) {
@@ -15,17 +15,15 @@ class SearchListViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  List<SongsDatum>? _searchSongs;
+  List<Song>? _searchSongs;
+  List<Song>? get searchSongs => _searchSongs;
 
-  List<SongsDatum>? get searchSongs => _searchSongs;
-
-  set searchSongs(List<SongsDatum>? response) {
+  set searchSongs(List<Song>? response) {
     _searchSongs = response;
     notifyListeners();
   }
 
-  String? _query = "Toofan";
-
+  String? _query = "";
   String? get query => _query;
 
   set query(String? response) {
@@ -38,6 +36,7 @@ class SearchListViewModel with ChangeNotifier {
   }
 
   Future<void> getResponse() async {
+    if (query == "") return;
     var response = await ApiService.getData(path: Urls.searchInfo + "$query");
     if (response is Success) {
       var data = searchResponseFromJson((response.data).toString());

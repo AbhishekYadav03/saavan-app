@@ -23,7 +23,7 @@ class AlbumInfoViewModel with ChangeNotifier {
   }
 
   Future<void> getAlbumById(String id) async {
-    String params = Urls.albumInfo + (id) + Urls.appVersion + Urls.jsonFormat;
+    String params = Urls.albumInfo + (id) + Urls.apiVersion + Urls.jsonFormat;
     var response = await ApiService.getData(path: params);
     if (response is Success) {
       var data = albumFromJson((response.data).toString());

@@ -24,7 +24,7 @@ class AlbumItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Hero(
-              tag: album?.image ?? "",
+              tag: album?.id ?? "",
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: CachedNetworkImage(

@@ -20,6 +20,7 @@ class PLayListItem extends StatelessWidget {
                   "https://sdlhivkecdnems05.cdnsrv.jio.com/c.saavncdn.com/editorial/wt15-49_20220715122650_500x500.jpg",
               width: 150,
               height: 90,
+              fit: BoxFit.cover,
               progressIndicatorBuilder: (context, url, downloadProgress) {
                 return Center(
                   child: CircularProgressIndicator(value: downloadProgress.progress),

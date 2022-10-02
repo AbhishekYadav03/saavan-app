@@ -34,7 +34,7 @@ class AlbumInfoPage extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 24),
                           child: Hero(
-                            tag: viewModel.albumInfo?.image ?? "",
+                            tag: viewModel.albumInfo?.id ?? "",
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(16),
                               child: CachedNetworkImage(
