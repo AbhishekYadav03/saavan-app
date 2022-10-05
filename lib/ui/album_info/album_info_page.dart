@@ -35,22 +35,24 @@ class AlbumInfoPage extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 24),
                           child: Hero(
                             tag: viewModel.albumInfo?.id ?? "",
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: CachedNetworkImage(
-                                height: 200,
-                                width: 200,
-                                imageUrl: viewModel.albumInfo?.image ?? "",
-                                fit: BoxFit.contain,
-                                progressIndicatorBuilder: (context, url, downloadProgress) {
-                                  print(downloadProgress.originalUrl);
-                                  return Center(
-                                    child: CircularProgressIndicator(value: downloadProgress.progress),
-                                  );
-                                },
-                                errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
-                              ),
-                            ),
+                            child: (viewModel.albumInfo?.image ?? "") == ""
+                                ? const SizedBox()
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: CachedNetworkImage(
+                                      height: 200,
+                                      width: 200,
+                                      imageUrl: viewModel.albumInfo?.image ?? "",
+                                      fit: BoxFit.contain,
+                                      progressIndicatorBuilder: (context, url, downloadProgress) {
+                                        return Center(
+                                          child: CircularProgressIndicator(value: downloadProgress.progress),
+                                        );
+                                      },
+                                      errorWidget: (context, url, error) =>
+                                          const Center(child: Icon(Icons.error)),
+                                    ),
+                                  ),
                           ),
                         ),
                       ),

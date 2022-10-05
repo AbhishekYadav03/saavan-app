@@ -1,7 +1,9 @@
+import 'package:saavan_app/service/service_locator.dart';
 import 'package:saavan_app/ui/imports.dart';
 import 'package:saavan_app/ui/search/search_page.dart';
 
-void main() {
+void main() async {
+  await setupServiceLocator();
   runApp(const MyApp());
 }
 

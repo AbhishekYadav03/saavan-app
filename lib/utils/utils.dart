@@ -1,4 +1,4 @@
-extension CutomExtentions on String {
+extension CustomExtentions on String {
   String get parseDuration {
     int duration = int.parse(this);
     return "${(duration / 60).floor()}m ${duration % 60}s";
@@ -25,4 +25,6 @@ extension CutomExtentions on String {
   }
 }
 
-class Utils {}
+class Utils {
+  static const packageId = "com.example.git_app";
+}
