@@ -41,7 +41,6 @@ class MyAudioHandler extends BaseAudioHandler {
         controls: [
           MediaControl.skipToPrevious,
           if (playing) MediaControl.pause else MediaControl.play,
-          MediaControl.stop,
           MediaControl.skipToNext,
         ],
         systemActions: const {
@@ -78,11 +77,13 @@ class MyAudioHandler extends BaseAudioHandler {
       if (_player.shuffleModeEnabled) {
         index = _player.shuffleIndices![index];
       }
-      final oldMediaItem = newQueue[index];
-      final newMediaItem = oldMediaItem.copyWith(duration: duration);
-      newQueue[index] = newMediaItem;
-      queue.add(newQueue);
-      mediaItem.add(newMediaItem);
+      if (newQueue.length > index) {
+        final oldMediaItem = newQueue[index];
+        final newMediaItem = oldMediaItem.copyWith(duration: duration);
+        newQueue[index] = newMediaItem;
+        queue.add(newQueue);
+        mediaItem.add(newMediaItem);
+      }
     });
   }
 
@@ -93,7 +94,9 @@ class MyAudioHandler extends BaseAudioHandler {
       if (_player.shuffleModeEnabled) {
         index = _player.shuffleIndices![index];
       }
-      mediaItem.add(playlist[index]);
+      if (playlist.length > index) {
+        mediaItem.add(playlist[index]);
+      }
     });
   }
 
@@ -139,9 +142,10 @@ class MyAudioHandler extends BaseAudioHandler {
   Future<void> removeQueueItemAt(int index) async {
     // manage Just Audio
     _playlist.removeAt(index);
-
     // notify system
-    final newQueue = queue.value..removeAt(index);
+    print(queue.value.elementAt(index).title);
+    final List<MediaItem> newQueue = queue.value..removeAt(index);
+    print("Delete $index length ${newQueue.length}");
     queue.add(newQueue);
   }
 

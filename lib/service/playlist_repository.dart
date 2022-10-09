@@ -2,12 +2,9 @@ import 'package:saavan_app/data/api_service.dart';
 import 'package:saavan_app/data/urls.dart';
 import 'package:saavan_app/models/response/api_error.dart';
 import 'package:saavan_app/models/response/api_success.dart';
-import 'package:saavan_app/models/song.dart';
 import 'package:saavan_app/models/song_url.dart';
 
 class DemoPlaylist {
-  List<Song> songs = [];
-
   Future<String?> getSongUrl(String encodedUrl) async {
     SongUrl currentSongUrl;
 

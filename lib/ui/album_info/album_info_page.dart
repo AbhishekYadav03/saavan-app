@@ -1,3 +1,5 @@
+import 'package:saavan_app/audio_player/audio_manager.dart';
+import 'package:saavan_app/service/service_locator.dart';
 import 'package:saavan_app/ui/imports.dart';
 import 'package:saavan_app/ui/widget/mini_player.dart';
 
@@ -107,9 +109,13 @@ class AlbumInfoPage extends StatelessWidget {
                                 maxLines: 1,
                               ),
                               onTap: () {
-                                var view = context.read<AudioPlayerPageViewModel>();
-                                view.songs = viewModel.albumInfo?.song ?? [];
-                                view.currentIndex = index;
+                                // var view = context.read<AudioPlayerPageViewModel>();
+                                // view.songs = viewModel.albumInfo?.song ?? [];
+                                // view.currentIndex = index;
+
+                                // getIt<DemoPlaylist>().songs= viewModel.albumInfo?.song ?? [];
+                                getIt<AudioServiceManager>().startPlayback(viewModel.albumInfo?.song ?? []);
+
                                 Navigator.pushNamed(context, AudioPlayerPage.route);
                               },
                               trailing: Row(

@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:saavan_app/data/api_service.dart';
 import 'package:saavan_app/data/urls.dart';
-import 'package:saavan_app/models/response/api_error.dart';
-import 'package:saavan_app/models/response/api_success.dart';
-import 'package:saavan_app/models/song.dart';
 import 'package:saavan_app/models/song_url.dart';
+
+import '../imports.dart';
 
 class AudioPlayerPageViewModel with ChangeNotifier {
   final AudioPlayer player = AudioPlayer();

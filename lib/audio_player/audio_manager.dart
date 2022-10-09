@@ -9,40 +9,78 @@ import 'package:saavan_app/service/service_locator.dart';
 
 class AudioServiceManager {
   // Listeners: Updates going to the UI
-  final currentSongTitleNotifier = ValueNotifier<String>('');
-  final playlistNotifier = ValueNotifier<List<String>>([]);
-  final progressNotifier = ProgressNotifier();
-  final repeatButtonNotifier = RepeatButtonNotifier();
+
+  final ProgressNotifier progressNotifier = ProgressNotifier();
+  final RepeatButtonNotifier repeatButtonNotifier = RepeatButtonNotifier();
+  final PlayButtonNotifier playButtonNotifier = PlayButtonNotifier();
+  final currentSongNotifier = ValueNotifier<MediaItem?>(null);
+  final playlistNotifier = ValueNotifier<List<MediaItem>>([]);
+
   final isFirstSongNotifier = ValueNotifier<bool>(true);
-  final playButtonNotifier = PlayButtonNotifier();
   final isLastSongNotifier = ValueNotifier<bool>(true);
   final isShuffleModeEnabledNotifier = ValueNotifier<bool>(false);
 
   final _audioHandler = getIt<AudioHandler>();
+  bool initialized = false;
 
   // Events: Calls coming from the UI
   void init() async {
-    await _loadPlaylist();
+    initialized = true;
+
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
     _listenToCurrentPosition();
     _listenToBufferedPosition();
     _listenToTotalDuration();
     _listenToChangesInSong();
+    await Future.delayed(const Duration(seconds: 1)).then((value) => play());
   }
 
-  Future<void> _loadPlaylist() async {
-    final songRepository = getIt<DemoPlaylist>();
-    final List<Song> playlist = songRepository.songs;
-
-    for (var song in playlist) {
-      add(song);
+  Future startPlayback(List<Song> songs) async {
+    if (initialized) {
+      print(initialized);
+      await _updatePlaylist(songs);
+      play();
+    } else {
+      print(initialized);
+      await _loadPlaylist(songs);
+      init();
     }
-    print("Playlist.isEmpty=${playlist.isEmpty}");
-    //_audioHandler.addQueueItems(mediaItems);
   }
 
-  Future<void> add(Song song) async {
+  Future<void> _loadPlaylist(List<Song> songs) async {
+    List<MediaItem> mediaItems = [];
+    for (var song in songs) {
+      MediaItem mediaItem = await _generateMediaItem(song);
+      mediaItems.add(mediaItem);
+    }
+    _audioHandler.addQueueItems(mediaItems);
+  }
+
+  Future<void> _updatePlaylist(List<Song> songs) async {
+    List<MediaItem> mediaItems = [];
+    for (var song in songs) {
+      MediaItem mediaItem = await _generateMediaItem(song);
+      mediaItems.add(mediaItem);
+    }
+    var previousIndex = _audioHandler.queue.value.length - 1;
+    _audioHandler.addQueueItems(mediaItems);
+    await Future.delayed(const Duration(seconds: 1)).then((value) {
+      _audioHandler.skipToNext();
+      var afterIndex = _audioHandler.queue.value.length;
+      print("update indexs $previousIndex $afterIndex");
+      if (afterIndex > previousIndex) {
+        removePrevious(0, previousIndex);
+      }
+    });
+  }
+
+  Future<void> _add(Song song) async {
+    var mediaItem = await _generateMediaItem(song);
+    _audioHandler.addQueueItem(mediaItem);
+  }
+
+  Future<MediaItem> _generateMediaItem(Song song) async {
     final songRepository = getIt<DemoPlaylist>();
     final String? songUrl = await songRepository.getSongUrl(song.moreInfo?.encodedUrl ?? "");
     final MediaItem mediaItem = MediaItem(
@@ -56,24 +94,28 @@ class AudioServiceManager {
       artUri: Uri.tryParse(song.image ?? ""),
       extras: {'url': songUrl},
     );
-    print("Added");
-    _audioHandler.addQueueItem(mediaItem);
+    return mediaItem;
   }
 
-  void remove() {
-    final lastIndex = _audioHandler.queue.value.length - 1;
-    if (lastIndex < 0) return;
-    _audioHandler.removeQueueItemAt(lastIndex);
+  void removePrevious(int start, int end) async {
+    for (int index = start; index <= end; index++) {
+      await _audioHandler.removeQueueItemAt(0);
+    }
   }
+
+  // void remove() {
+  //   final lastIndex = _audioHandler.queue.value.length - 1;
+  //   if (lastIndex < 0) return;
+  //   _audioHandler.removeQueueItemAt(lastIndex);
+  // }
 
   void _listenToChangesInPlaylist() {
     _audioHandler.queue.listen((playlist) {
       if (playlist.isEmpty) {
         playlistNotifier.value = [];
-        currentSongTitleNotifier.value = '';
+        currentSongNotifier.value = null;
       } else {
-        final newList = playlist.map((item) => item.title).toList();
-        playlistNotifier.value = newList;
+        playlistNotifier.value = playlist;
       }
       _updateSkipButtons();
     });
@@ -131,7 +173,7 @@ class AudioServiceManager {
 
   void _listenToChangesInSong() {
     _audioHandler.mediaItem.listen((mediaItem) {
-      currentSongTitleNotifier.value = mediaItem?.title ?? '';
+      currentSongNotifier.value = mediaItem;
       _updateSkipButtons();
     });
   }
@@ -154,6 +196,7 @@ class AudioServiceManager {
   void seek(Duration position) => _audioHandler.seek(position);
 
   void previous() => _audioHandler.skipToPrevious();
+  void skipToIndex(index) => _audioHandler.skipToQueueItem(index);
   void next() => _audioHandler.skipToNext();
 
   void repeat() {
